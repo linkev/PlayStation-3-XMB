@@ -4,7 +4,9 @@
 
 ## Live Demo Website
 
-[View Live Demo](https://linkev.github.io/PlayStation-3-XMB)
+### [View Live Demo!](https://linkev.github.io/PlayStation-3-XMB)
+
+## About the project
 
 WebGL-based recreation of the PlayStation 3 XrossMediaBar (XMB) wave rendering system with kind-of authentic shaders and close-enough physics simulation.
 
