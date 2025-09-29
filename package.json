@@ -1,0 +1,46 @@
+{
+  "name": "playstation-3-xmb",
+  "version": "1.0.0",
+  "description": "A faithful recreation of the iconic PlayStation 3 XrossMediaBar (XMB) background wave effects using WebGL. ",
+  "main": "index.html",
+  "scripts": {
+    "dev": "serve . -p 8000 -o",
+    "start": "serve . -p 8000",
+    "build": "echo 'No build step required - static files only'",
+    "deploy": "gh-pages -d .",
+    "lint": "eslint *.js",
+    "format": "prettier --write *.js *.html *.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linkev/PlayStation-3-XMB.git"
+  },
+  "keywords": [
+    "playstation",
+    "ps3",
+    "xmb",
+    "webgl",
+    "waves",
+    "recreation",
+    "gaming",
+    "retro",
+    "nostalgia"
+  ],
+  "author": "linkev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/linkev/PlayStation-3-XMB/issues"
+  },
+  "homepage": "https://linkev.github.io/PlayStation-3-XMB",
+  "devDependencies": {
+    "eslint": "^9.29.0",
+    "gh-pages": "^6.3.0",
+    "serve": "^14.2.4",
+    "prettier": "^3.6.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
