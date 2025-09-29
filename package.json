@@ -33,10 +33,10 @@
   },
   "homepage": "https://linkev.github.io/PlayStation-3-XMB",
   "devDependencies": {
-    "eslint": "^9.29.0",
+    "eslint": "^9.36.0",
     "gh-pages": "^6.3.0",
-    "serve": "^14.2.4",
-    "prettier": "^3.6.1"
+    "serve": "^14.2.5",
+    "prettier": "^3.6.2"
   },
   "browserslist": [
     "> 1%",
