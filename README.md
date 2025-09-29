@@ -162,8 +162,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 - [Alphardex](https://codepen.io/alphardex/pen/poPZNwE) for the original code, seriously, this CodePen was the closest thing I could find to an XMB code starting point.
 
-There was another guy on [Reddit](https://www.reddit.com/r/webdev/comments/1ca4gpy/ps3s_xmb_interface_done_in_html5_css_javascript/) that had a really good replica, but I was too slow to find it and it seems the Github repo is long gone.
-
 - Sony for the original PS3 XMB implementation, personally I think this is the best thing they have designed and I really love it.
 
 ## Support
