@@ -62,6 +62,8 @@ npm run start
 
 ## Explanation of the files and folders
 
+- "alphardex-code" is the original code in the CodePen that I found and used as a starting point for this entire project. For archival purposes and maybe some useful hints when developing off it.
+
 - "backup" folder is what I had at the beginning of the project, before splitting it all up into tiny files to make management easier (?)
 
 - "gradients" folder is just the downloaded images from the PS3 Dev Wiki, some generated gradient attempts, which are probably not good enough.
