@@ -106,8 +106,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 - [Alphardex](https://codepen.io/alphardex/pen/poPZNwE) for the original code, seriously, this CodePen was the closest thing I could find to an XMB code starting point.
 
-- Sony for the original PS3 XMB implementation, personally I think this is the best thing they have designed and I really love it.
-
 ## Support
 
 ### [Open an issue on GitHub!](https://github.com/linkev/Playstation-3-XMB/issues)
