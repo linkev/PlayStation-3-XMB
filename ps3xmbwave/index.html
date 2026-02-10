@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayStation 3 XMB Recreation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="wave-canvas"></canvas>
+
+  <script src="background-gradients-day.js"></script>
+  <script src="background-gradients-night.js"></script>
+  <script src="spline-settings.js"></script>
+  <script src="particles-settings.js"></script>
+  <script src="settings-panels.js"></script>
+  <script src="spline-reverse.js"></script>
+  <script src="spline.js"></script>
+  <script src="particles.js"></script>
+  <script>
+    (function () {
+      const canvas = document.getElementById('wave-canvas');
+      const gl = canvas.getContext('webgl2', {
+        antialias: true,
+        alpha: false,
+        powerPreference: 'high-performance',
+      });
+
+      if (!gl) {
+        document.body.textContent = 'WebGL 2 required';
+        return;
+      }
+
+      gl.getExtension('OES_texture_float_linear');
+      gl.getExtension('EXT_color_buffer_float');
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(window.innerWidth * dpr);
+        canvas.height = Math.floor(window.innerHeight * dpr);
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+
+      window.createSettingsPanel({
+        id: 'spline-panel',
+        title: 'Spline Controls',
+        settings: window.SPLINE_SETTINGS,
+        meta: window.SPLINE_SETTINGS_META,
+        position: { top: '12px', right: '12px' },
+        showPosition: { top: '12px', right: '12px' },
+      });
+
+      window.createSettingsPanel({
+        id: 'particles-panel',
+        title: 'Particles Controls',
+        settings: window.PARTICLE_SETTINGS,
+        meta: window.PARTICLE_SETTINGS_META,
+        position: { top: '12px', left: '12px' },
+        showPosition: { top: '12px', left: '12px' },
+      });
+
+      const splineLayer = window.createSplineLayer(gl, canvas);
+      const particlesLayer = window.createParticlesLayer(gl, canvas);
+
+      let prevFrameMs = performance.now();
+      let splineTimeSec = 0;
+      let particlesTimeSec = Math.random() * 1000;
+
+      function frame(nowMs) {
+        const dtSec = Math.max(0, (nowMs - prevFrameMs) / 1000);
+        prevFrameMs = nowMs;
+
+        splineTimeSec += dtSec;
+        particlesTimeSec += dtSec;
+
+        splineLayer.render(splineTimeSec);
+        particlesLayer.render(particlesTimeSec);
+        requestAnimationFrame(frame);
+      }
+
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

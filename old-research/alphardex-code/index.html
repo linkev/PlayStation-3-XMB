@@ -1,0 +1,38 @@
+<div class="relative w-screen h-screen">
+  <div class="fixed z-0 wave-cloth w-full h-full animated-bg-grad"></div>
+  <div class="relative w-screen h-screen flex-center">
+    <form class="relative -top-16 card w-70 p-6 bg-transparent">
+      <div class="space-y-4">
+        <div class="flex-center">
+          <!-- logo -->
+          <img src="https://assets.codepen.io/1256482/internal/avatars/users/default.png?fit=crop&format=auto&height=80&version=1568462706&width=80" alt="" class="avatar w-18 h-18 block border-2 border-solid border-white" />
+        </div>
+        <div class="text-center text-white text-lg text-glow whitespace-no-wrap">
+          欢迎来到 美妙的WebGL世界
+        </div>
+        <!-- 用户名 -->
+        <input type="text" class="form-control rounded-md glass-2" placeholder="用户名" id="username" />
+        <div class="relative flex items-center space-x-2">
+          <!-- 密码 -->
+          <input type="password" class="form-control rounded-md glass-2" placeholder="密码" id="password" />
+          <!-- 登录 -->
+          <div class="absolute v-center -right-8 btn btn-primary btn-circle flex-none w-6 h-6 flex-center glass-2 activate bg-black-5 mask-arrow" id="btn-enter"></div>
+        </div>
+      </div>
+    </form>
+    <!-- 日期 -->
+    <div class="absolute top-4 right-0">
+      <div class="pl-16 pr-4 py-2 bg-black-6 shadow-1 rounded-md rounded-r-none">
+        <div class="flex space-x-4">
+          <div class="text-white text-glow flex items-center space-x-2">
+            <span id="date-str">2021/1/1 00:00</span>
+            <i class="gg gg-time inline-flex bg-glow" style="--ggs: 0.66;"></i>
+          </div>
+          <div class="btn btn-primary px-2 py-1 text-xs glass-2 activate bg-black-5">
+            切换界面
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
