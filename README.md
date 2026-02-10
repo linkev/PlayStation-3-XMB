@@ -1,43 +1,37 @@
 # PlayStation 3 XMB Waves Recreation
 
-![Demo of PlayStation 3 XMB Waves Recreation](demo.png)
+## Click the image for a demo!
 
-## Live Demo Website
-
-### [View Live Demo!](https://linkev.github.io/PlayStation-3-XMB)
+[![Demo of PlayStation 3 XMB Waves Recreation](demo.png)](https://linkev.github.io/PlayStation-3-XMB)
 
 ## About the project
 
-WebGL-based recreation of the PlayStation 3 XrossMediaBar (XMB) wave rendering system with kind-of authentic shaders and close-enough physics simulation.
+WebGL-based recreation of the PlayStation 3 XrossMediaBar (XMB) background wave system.
 
-I guess the goal with this project is someone smarter than me might come along and help improve this absolute mess so it looks a bit more presentable.
+This repo used to be mostly "looks close enough, ship it" shader guesswork (still archived in `old-research`), but the active implementation now lives in `ps3xmbwave` and is based on reverse engineering of `spline.elf`. I will eventually reverse engineer `particles.elf` as much as is possible with AI, unless someone smarter is reading this and would like to help!
 
-To be fair, in it's current state, it's a miracle it even looks as good as it does. I have a nasty bug with the "Wave Perturbation" setting, it has to be 0 for it all to work. I have no idea what I'm doing.
-
-The project is such a mess that you can feel free and clean up any of the mess I made, I'm so sorry.
+It is still a beautiful mess. It is just now a slightly more informed mess.
 
 This whole idea and project came to be because I wanted an easter egg in an internal DevOps tool I was developing at work and I thought why not open-source it and make it better for everyone, since I couldn't find any other similar projects or clones.
+
 ## Credits
 
-While this is inspired by the official PlayStation 3 XMB background wave design, the major starting point was from this [CodePen by Alphardex](https://codepen.io/alphardex/pen/poPZNwE). All of the modern optimizations and cleanups have been made from this code and I must admit, it was mostly trial and error with Claude/Gemini, I'M SORRY!
+While this is inspired by the official PlayStation 3 XMB background wave design, the major starting point was from this [CodePen by Alphardex](https://codepen.io/alphardex/pen/poPZNwE). All of the modern optimizations and cleanups have been made from this code and I must admit, it was mostly trial and error with Claude/Gemini/ChatGPT, I'M SORRY!
 
-## Issues to resolve, PR's welcome!
+## Current Features (new implementation in `ps3xmbwave`)
 
-- While we have the original close-enough color themes, these are not one-to-one replicas. I tried making shaders that tried to extract the original gradients and apply them, but to no avail. If anyone knows how to get the Day and Night gradients integrated with the original colors, that would be amazing! Good starting points are: https://www.psdevwiki.com/ps3/Template:XMB_colors and https://www.psdevwiki.com/ps3/Lines.qrc where I tried to extract the .dds files and convert them to shaders, but my skill issue got in the way.
+- **Reverse-engineered spline pipeline pass**: The wave displacement is generated via a CPU-side pipeline in `spline-reverse.js` and fed into a displacement texture.
+- **WebGL2 renderer**: Pure WebGL2 rendering path (background + spline mesh + particles), no framework dependency.
+- **Day/Night monthly gradient presets**: 12 month presets with day/night variants are available in the UI, plus a fallback "Original (RGB Sliders)" mode.
+- **Live control panels**: Separate spline and particle panels with per-setting sliders/selects and reset buttons.
+- **Particle sparkle layer**: Additive point-sprite sparkles with adjustable count, opacity, size, and flow speed.
+- **Reverse engineering notes included**: [SPLINE_REVERSE_ENGINEER.md](SPLINE_REVERSE_ENGINEER.md) documents traced functions, memory ranges, and what runtime data is still missing.
 
-- Another thing is the more accurate sparkles engine. Right now its just fading in and out dots, that are good enough, but the goal would be to have the truly dazzling sparkles you can see here: https://www.youtube.com/watch?v=ZuUmT4XL-bQ - I spent hours looking at the XMB on [RPCS3](https://rpcs3.net/) and once again, skill issue won.
+## Reality check (what still needs work)
 
-- Finally, getting the waves to calm down and be more accurate to the way they flow in an actual PlayStation 3 XMB would be the cherry on top! Again, someone with more skill might be able to read the https://www.psdevwiki.com/ps3/Lines.qrc source code and then recreate it.
-
-The whole aim is just to recreate the background XMB waves effect which can then be hooked onto a website as a simple theme or anyone else could do whatever with it. If you want to recreate the whole XMB, feel free to fork the project!
-
-## Current Features
-
-- **Wave Animation**: Recreates the flowing PS3 background waves
-- **Original Colors**: All the authentic monthly color themes from the PS3
-- **Sparkle Effects**: Little particles that follow the wave movement
-- **Adjustable Settings**: Control wave speed, colors, and brightness
-- **Fullscreen Mode**: Hide the controls for a clean view
+- Day/night gradients are now integrated as actual presets, but they're not perfect like in the .dds files, so this issue is partially solved.
+- Sparkles are still not 1:1 PS3-perfect (they look decent, but they are still the "good enough for now" version).
+- The wave pipeline is much less blind guesswork than before, but still not fully 1:1 because some runtime descriptor data from real hardware is still missing.
 
 ## Local Development
 
@@ -57,96 +51,42 @@ npm install
 npm run start
 ```
 
-4. Open your browser and navigate to `http://localhost:8000`
-
+4. Open in browser:
+- Main current implementation: `http://localhost:8000/ps3xmbwave/`
+- Old implementation archive: `http://localhost:8000/old-research/`
+- DDS gradient utility: `http://localhost:8000/dds/`
 
 ## Explanation of the files and folders
 
-- "alphardex-code" is the original code in the CodePen that I found and used as a starting point for this entire project. For archival purposes and maybe some useful hints when developing off it.
+- `ps3xmbwave`: Current active implementation (reverse-engineering-based spline + particles + settings UI).
+- `old-research`: Previous implementation and experiments (guesswork/prototyping era), kept for history and references.
+- `dds`: "Poor man's gradient extraction" tool. Loads PS3 `.dds` files, solves best-fit 2D linear gradients (angle + colors), previews reconstruction, and exports JS preset code.
+- `SPLINE_REVERSE_ENGINEER.md`: Reverse-engineering notes from Ghidra pass on PS3 spline code.
+- `demo.png`: Preview image used in this README.
 
-- "backup" folder is what I had at the beginning of the project, before splitting it all up into tiny files to make management easier (?)
+## How to Use (`ps3xmbwave`)
 
-- "gradients" folder is just the downloaded images from the PS3 Dev Wiki, some generated gradient attempts, which are probably not good enough.
+1. **Spline panel (top-right)**:
+   - Pick a gradient preset (`MM Day` / `MM Night`) or use `Original (RGB Sliders)`.
+   - Tweak wave behavior, blend, fresnel, brightness, and reverse-pipeline knobs. May be useful to get a better wave.
 
-- "js" folder is just the libraries to run it, local copy.
+2. **Particles panel (top-left)**:
+   - Tweak sparkle count, opacity, base size, variance, and speed.
 
-- "tools" folder has a "gradient extractor". I tried to be smart and feed all of the gradient files in bulk, then some AI Javascript magic maybe could convert the gradient images into code, which then I could have used to make the legit Day/Night cycles with 100% accuracy. I leave my failure there for someone else to maybe figure it out, I think I was on the right path.
+3. **UI visibility**:
+   - Each panel has a `Hide` button and a matching `Show ...` button.
+   - There is no global fullscreen/hide-all hotkey in the new version right now.
 
-- "waves" folder is the actual code itself that runs and renders this whole mess.
+## Technical Details (subject to change anytime)
 
-- "index.html" is the entry point and the frontend
-## How to Use
+### WebGL implementation (`ps3xmbwave`)
+- **Rendering path**: WebGL2 only.
+- **Layering**: Background gradient pass, spline wave mesh pass, additive particles pass.
+- **Displacement source**: CPU-generated spline displacement texture (`256 x 64`, single-channel float) uploaded per frame.
 
-1. **Wave Configuration**: Adjust various parameters in the right panel:
-   - **Color Theme**: Choose from authentic PS3 monthly color themes
-   - **Flow Speed**: Control the wave animation speed
-   - **Wave Opacity**: Adjust wave transparency
-   - **Day/Night**: Change brightness levels
-   - **Sparkle Intensity**: Control particle visibility
-
-2. **Interface Controls**:
-   - **Hide Interface**: Click the "Hide Interface" button to enter fullscreen mode
-   - **Show Interface**: Click anywhere on the screen (when hidden) to show interface again
-   - **Keyboard Shortcut**: Press 'H' key to toggle interface visibility
-
-3. **Performance Monitoring**: FPS counter is displayed in bottom-left corner
-
-## Technical Details
-
-### WebGL Implementation
-- **Rendering Engine**: [REGL](https://github.com/regl-project/regl)
-- **Shaders**: Custom vertex and fragment shaders for authentic XMB effects
-- **Performance**: Adaptive resolution scaling based on device capabilities
-- **Compatibility**: WebGL2 with WebGL1 fallback
-
-### Wave Physics
-- **Noise Functions**: Authentic XMB noise patterns from original PS3 code
-- **Animation**: Time-based wave displacement with flowing surface details
-- **Particles**: Surface-following sparkle effects with opacity variance
-
-### Browser Support
-- Chrome 51+
-- Firefox 51+
-- Safari 10+
-- Edge 79+
-
-## Customization
-
-### Color Themes
-The project includes the original PS3 color themes, but only static ones, not the actual gradients and Day/Night cycles (issue to resolve in the future, PR's welcome!):
-- **Sapphire** (Default): `[37, 89, 179]` - Original XMB blue
-- **Emerald**: `[20, 101, 50]` - Deep green
-- **Ruby**: `[116, 15, 48]` - Rich red
-- **Gold**: `[160, 120, 0]` - Warm gold
-- **Amethyst**: `[118, 6, 135]` - Deep purple
-- **Turquoise**: `[26, 115, 115]` - Cyan blue
-- **Amber**: `[192, 114, 40]` - Orange amber
-- **Silk**: `[104, 107, 108]` - Silver gray
-
-### Adding Custom Colors
-Edit the color palette in `waves/waves-controller.js` within the `addColorSelector()` method:
-
-```javascript
-addColorSelector() {
-  const colors = [
-    ["original", [37, 89, 179]], // Original XMB blue
-    ["custom-name", [r, g, b]], // Add your custom color here
-    ["january", [203, 191, 203]], // Silver/gray
-    // ... existing monthly colors
-  ];
-
-  this.addList(
-    "Color Theme",
-    colors,
-    "original", // default selection
-    (color) => window.ps3Waves.updateParams({
-      backgroundColor: color
-    })
-  );
-}
-```
-
-If you're adding the original gradients with Day/Night support, probably better to have a different file or section to manage all of that.
+### Reverse-engineered spline pipeline status
+- **What is implemented**: Spline-table-style transform + normalization flow and synthetic descriptor-driven displacement generation.
+- **What is still missing**: Exact runtime-fed descriptor/control payload from real PS3 execution (`b380` data path), which is needed for true 1:1 output.
 
 ## Contributing
 
@@ -162,6 +102,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Acknowledgments and a Thank You
 
+- Everyone at Sony for the original PS3 XMB implementation, especially the people who worked on the spline and particles files, personally I think this is the best thing they have designed and I really love it!
+
 - [Alphardex](https://codepen.io/alphardex/pen/poPZNwE) for the original code, seriously, this CodePen was the closest thing I could find to an XMB code starting point.
 
 - Sony for the original PS3 XMB implementation, personally I think this is the best thing they have designed and I really love it.
@@ -169,3 +111,12 @@ This project is open source and available under the [MIT License](LICENSE).
 ## Support
 
 ### [Open an issue on GitHub!](https://github.com/linkev/Playstation-3-XMB/issues)
+
+## TODO
+
+- Capture real runtime descriptor/control payloads (`b300` / `b380`) from PS3 hardware or RPCS3 and wire them into the pipeline.
+- Improve sparkle behavior toward PS3-accurate motion/lifecycle (less "just dots", more "XMB glitter sparkly energy stuff they got going on").
+- Keep tuning wave calmness and flow cadence to better match real hardware captures. I realise the waves have sharp edges, when the real thing is like a water wave (just realised it!)
+- Validate month day/night gradients against more references and tighten remaining color/angle drift.
+- Add optional debug views for displacement texture / pipeline intermediates so tuning is less blind.
+- Other features the original firmware had like automatic day/night cycles and the sparkles moving around (based on mouse/controller?)
