@@ -7,7 +7,7 @@
     "dev": "serve . -p 8000 -o",
     "start": "serve . -p 8000",
     "build": "echo 'No build step required - static files only'",
-    "deploy": "gh-pages -d .",
+    "deploy": "gh-pages -d ps3xmbwave",
     "lint": "eslint *.js",
     "format": "prettier --write *.js *.html *.md"
   },
